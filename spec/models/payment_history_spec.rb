@@ -2,9 +2,21 @@ require 'rails_helper'
 
 RSpec.describe PaymentHistory, type: :model do
   
+  context 'Fields validate' do
+    before(:all) do
+      @payment = create(:payment)
+    end
+
+    it "is valid with valid attributes" do
+      expect(@payment.payment_history).to be_valid
+    end
+
+  end
+
   context 'Associations' do
     it do
-      is_expected.to belong_to(:payment)
+      t = PaymentHistory.reflect_on_association(:payment)
+      expect(t.macro).to eq(:belongs_to)
     end
   end
 end

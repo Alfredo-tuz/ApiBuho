@@ -1,21 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
-  context 'Fields' do
-    it { should have_db_column(:name) }
+  context 'Fields validate' do
+    before(:all) do
+      @client = create(:client)
+    end
+
+    it "is valid with valid attributes" do
+      expect(@client).to be_valid
+    end
+
   end
 
   context 'Associations' do
     it do
-      is_expected.to have_many(:payments)
+      t = Client.reflect_on_association(:payments)
+      expect(t.macro).to eq(:has_many)
     end
   end
 
-  context 'Validates' do
-    it do
-      is_expected.to validate_presence_of(:name)
-      is_expected.to validate_presence_of(:email)
-      is_expected.to validate_uniqueness_of(:email)
-    end
-  end
 end
