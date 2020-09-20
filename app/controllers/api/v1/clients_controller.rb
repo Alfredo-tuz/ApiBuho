@@ -15,17 +15,7 @@ class Api::V1::ClientsController < ApplicationController
 
   # POST /clients
   def create
-    @client = Client.new(client_params)
-    if @client.save
-      if payment_history PaymentHistory::STATUS_PAYMENT_PAID
-        render json: {status: :created,data:@client,message:"Se ha creado correctamente"}, status: :created
-      else
-        render json: {status: :unprocessable_entity,data:@payment_history.errors,message:"Ha pasado un error"}, status: :unprocessable_entity  
-      end
-    else
-      payment_history PaymentHistory::STATUS_PAYMENT_NOT_PAID
-      render json: @client.errors, status: :unprocessable_entity
-    end
+    render json: Client.create!(client_params), status: 201
   end
 
   # PATCH/PUT /clients/1
@@ -43,20 +33,6 @@ class Api::V1::ClientsController < ApplicationController
   end
 
   private
-    def payment_history status
-        is_save_history_payment = false
-        if @client.payments.size > 0
-            @client.payments.each do |item_payment|
-                @payment_history = PaymentHistory.new(payment:item_payment,status:status)
-                if @payment_history.save
-                    is_save_history_payment = true
-                end
-            end
-        end
-        is_save_history_payment
-    end
-    
-
     # Use callbacks to share common setup or constraints between actions.
     def set_clients
       @client = Client.find(params[:id])

@@ -29,19 +29,9 @@ set :bundle_command, ''
 #  rake "send_email_automatic:send_notification"
 #end
 
-def CalculateCrontab(item_subscription)
-    crontab = ''
-    if item_subscription[:type_subscription] == Subscription::TYPE_SUBSCRIPTION_MONTHLY
-        crontab = '0 0 1 * *'  #cada mes
-    else
-        crontab = '0 0 1 1 *' #cada año del dia del mes 1 en enero en 00:00
-    end
-    crontab
-end
-
-subscriptions = Subscription.all
+subscriptions = Subscription.where(is_active:true)
 subscriptions.each do |item_subscription|
-    result = CalculateCrontab(item_subscription);
+    result = Crontab.new(item_subscription).crontab
     every result.to_s do
         rake "task_from_subscription:insert_payment_automatic[" + item_subscription[:id].to_s+ "]"
     end

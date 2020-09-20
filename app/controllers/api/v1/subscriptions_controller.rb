@@ -38,6 +38,12 @@ class Api::V1::SubscriptionsController < ApplicationController
     @subscription.destroy
   end
 
+  # GET /subscriptions/active_crontab
+  def active_crontab
+    system("rake update_whenever:crontabUpdate")
+    render json: {status:true,message:"Se ha activado el crontab"},status: 200
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subscription

@@ -3,6 +3,10 @@
 #
 # Examples:
 #
-Subscription.create(name: 'Luke barato', is_active: true, type_subscription: Subscription::TYPE_SUBSCRIPTION_MONTHLY)
-Subscription.create(name: 'Luke', is_active: true, type_subscription: Subscription::TYPE_SUBSCRIPTION_YEARLY)
-Subscription.create(name: 'Empleados sin limites', is_active: true, type_subscription: Subscription::TYPE_SUBSCRIPTION_MONTHLY)
+2.times do
+    Subscription.create(name: Faker::Subscription.plan, is_active: true, type_subscription: Subscription::TYPE_SUBSCRIPTION_MONTHLY)
+end
+
+2.times do
+    Subscription.create(name: Faker::Subscription.plan, is_active: true, type_subscription: Subscription::TYPE_SUBSCRIPTION_YEARLY)
+end

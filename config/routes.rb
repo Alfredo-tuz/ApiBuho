@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   namespace :api do 
     namespace :v1 do
-      resources :subscriptions
-      resources :clients , only: [:create]
+      resources :subscriptions do
+        collection do
+          get :active_crontab
+        end
+      end
+      resources :clients #, only: [:create]
       resources :payment_histories, only: [:index]
     end
   end
