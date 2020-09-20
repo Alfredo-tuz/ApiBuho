@@ -4,11 +4,11 @@ RSpec.describe PaymentHistory, type: :model do
   
   context 'Fields validate' do
     before(:all) do
-      @payment = create(:payment)
+      @payment_history = create(:payment, :with_payment_history)
     end
 
     it "is valid with valid attributes" do
-      expect(@payment.payment_history).to be_valid
+      expect(@payment_history).to be_valid
     end
 
   end

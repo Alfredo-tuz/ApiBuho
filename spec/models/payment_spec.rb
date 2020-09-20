@@ -2,18 +2,27 @@ require 'rails_helper'
 
 RSpec.describe Payment, type: :model do
 
-  context 'Associations' do
-    it do
-      is_expected.to belong_to(:client).of_type(Client)
-      is_expected.to belong_to(:subscription).of_type(Subscription)
-      is_expected.to has_one(:payment_history).of_type(PaymentHistory)
+  context 'Fields validate' do
+    before(:all) do
+      @payment = create(:payment, :with_payment_history)
     end
+
+    it "is valid with valid attributes" do
+      expect(@payment).to be_valid
+    end
+
   end
 
-  context 'Validates' do
+  context 'Associations' do
     it do
-      is_expected.to validate_presence_of(:type_payment)
-      is_expected.to validate_presence_of(:date_payment)
+      t = Payment.reflect_on_association(:payment_history)
+      expect(t.macro).to eq(:has_one)
+
+      t = Payment.reflect_on_association(:subscription)
+      expect(t.macro).to eq(:belongs_to)
+
+      t = Payment.reflect_on_association(:client)
+      expect(t.macro).to eq(:belongs_to)
     end
   end
 

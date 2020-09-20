@@ -1,8 +1,19 @@
 FactoryBot.define do
   factory :payment do
-    client { FactoryBot.create(:client) }
-    subscription { FactoryBot.create(:subscription) }
+    client
+    subscription
     type_payment { 1 }
-    payment_history { FactoryBot.create(:payment_history) }
+    date_payment { DateTime.current }
+
+    
+    trait :with_payment_history do
+      after(:create) do |account|
+        create(
+          :payment_history,
+          status: 1
+        )
+      end
+    end
+
   end
 end
